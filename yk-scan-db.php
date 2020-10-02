@@ -33,22 +33,27 @@
 			$result .= '<li>'.$post_type.' - <a href="'.$post_url.'" target="_blank">'.$post_url.'</a> - <a href="'.site_url().'/wp-admin/post.php?post='.$post_id.'&action=edit" target="_blank">'.__('Edit', 'yk-scan-db').'</a></li>';
 		}
 		$result .= '<ul>';
+		if ( $data->found_posts == 0 ){
+			$result = __( "Not found", "yk-scan-db" );
+		}
 		return $result;
 	}
 
 	function yk_scan_db_page(){
 		$post_types = get_post_types();
+		$string = ( isset( $_POST["string"] ) ) ? $_POST["string"] : '';
+		$action = ( isset( $_POST["action"] ) ) ? $_POST["action"] : '';
 		echo '<div class="wrap">
 			<h1>'.__( "Scan post types", "yk-scan-db" ).'</h1>
 			<p>
 			<form method="post" action="">
 				<input type="hidden" name="action" value="scan">
-				<input type="text" name="string" value="'.$_POST["string"].'" placeholder="'.__('String', 'yk-scan-db').'" required>
+				<input type="text" name="string" value="'.$string.'" placeholder="'.__('String', 'yk-scan-db').'" required>
 				<input type="submit" class="button button-primary" value="'.__('Search', 'yk-scan-db').'">
 			</form>
 			</p>';
-			if ( $_POST["action"] == 'scan'){
-				if ( $_POST["string"] ){
+			if ( $action == 'scan'){
+				if ( $string ){
 					echo yk_scan_db_function( $_POST["string"] );
 				}
 			}
